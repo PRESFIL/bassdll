@@ -31,8 +31,7 @@
 #include <limits.h>
 #include <math.h>
 
-
-
+#define NELEMENTS(x)  (sizeof(x) / sizeof(x[0]))
 
 #define MAGIC 1.0594631
 inline int fixTone(signed char tone)
@@ -54,6 +53,11 @@ inline int fixTone(signed char tone)
  struct note {
   signed char tone;
   unsigned char duration;
+ note() {}
+ note(signed char tone, unsigned char duration) {
+  this->tone = tone;
+  this->duration = duration;
+ }
 };
 ///CHANNEL
 class channel
@@ -69,7 +73,6 @@ class channel
       void init();
 void setupNote(unsigned long started_playing_time);
     void next();
-    void queue(note* n);
     void fixHigh();
     void fixLow();
     inline void notehacks();
@@ -88,7 +91,7 @@ void setupNote(unsigned long started_playing_time);
     unsigned char supersolo; //supersolo value
     unsigned char ssinterval; //supersolo interval
     
-    note **notes;
+    note *notes;
     int current;
     
 
@@ -104,6 +107,6 @@ class mixer
     mixer();
     void add_channel(channel*x);
     void play();
-   
+    void dump();
 };
 #endif
