@@ -23,23 +23,24 @@
 
 void channel::next()
 {
-  duration_sum += notes[current].duration * 10;
+  duration_sum += get_note(current).duration * 10;
   current++;
-  if (current==insert_at) current = 0;
+  if (current==pattern_len) current = 0;
 }
 
 channel::channel(int apin, int how_many_notes)
 {
   pinMode(apin,OUTPUT);
   halflife = 0;
-  //next_invert_time = 0;
- // nextTime = 0;  
   pin = apin;
-//  notes = NULL;
-  realloc_notes();
+  pattern_len = 0;
   init();
-  
- // debug(sizeof(note*) * how_many_notes);
+}
+
+void channel::set_pattern(prog_uint16_t* pattern, int pattern_len)
+{
+    this->pattern = pattern;
+    this->pattern_len = pattern_len;
 }
 
 void channel::init()
@@ -56,9 +57,9 @@ void channel::init()
 
 void channel::setupNote(unsigned long started_playing_time)
 {
+ note solonote = get_note(current);
 
-      note solonote = notes[current];
- switch(notes[current].tone)
+ switch(get_note(current).tone)
  {
    //hacks for various notes
    case KICK:
@@ -73,27 +74,24 @@ void channel::setupNote(unsigned long started_playing_time)
      transpose++;
      break;
    case TRANSPOSEDOWN:
-   /// debug(444);
      transpose--;
      halflife = INT_MAX;
      break;
    case SUPERSOLO: 
-
      supersolo = solonote.duration;
-     solonote.duration = 0;
-     next();
-     solonote.duration = supersolo; //restore duration for the next loop
+     current++;
+     if (current==pattern_len) current = 0;
      setupNote(started_playing_time); //fake out everything
      return;
      break;
     default:
-     halflife = 500000/fixTone(notes[current].tone + transpose);
+     halflife = 500000/fixTone(get_note(current).tone + transpose);
      break; 
  }
  if (halflife <0) halflife = INT_MAX; //we use negative number on occasion for things like rests...
  unsigned long old_nextTime = nextTime;
   nextTime = started_playing_time + ((unsigned long) //instruct the compiler that this is going to get BIG... otherwise things overflow here
- duration_sum + notes[current].duration*10)*1000;
+ duration_sum + get_note(current).duration*10)*1000;
  next_invert_time = old_nextTime + halflife;
 
 }
@@ -106,9 +104,8 @@ void mixer::dump()
       channel* c = channels[i];
       Serial.print("Channel ");
       Serial.println(i);
-      note* notes = c->notes;
-      for (int j = 0; j < c->insert_at; j++) {
-        note n = notes[j];
+      for (int j = 0; j < c->pattern_len; j++) {
+        note n = c->get_note(j);
         Serial.print("(");
         Serial.print(n.tone);
         Serial.print(", ");
@@ -119,21 +116,13 @@ void mixer::dump()
      }
 }
 
-
-
-
-void channel::realloc_notes()
-{
-    insert_at = 0;
-}
 channel::~channel()
 {
-  //free(notes);
 }
 
 inline void channel::notehacks ()
 {
-  switch(notes[current].tone)
+  switch(get_note(current).tone)
   {
     case KICK:
       
@@ -161,7 +150,7 @@ inline void channel::notehacks ()
   //supersolo hack
   if (supersolo!=0 && (ssinterval--)%supersolo==0)
   {
-    char super = (notes[current+1].tone > notes[current].tone)?-1:1;
+    char super = (get_note(current+1).tone > get_note(current).tone)?-1:1;
    // halflife *= ((1 + (.01*super)) * supersolo/10.);
    halflife += super;
   }
@@ -191,25 +180,16 @@ void mixer::play()
      for(int i = 0; i < max_channel; i++)
      {
        
-      // debug(0);
-      //note* current = channels[i]->notes[channels[i]->current];
-     // if (channels[i]->notes[channels[i]->current]->tone==REST) continue; //not the minDelay
-      if (channels[i]->notes[channels[i]->current].tone==STOP) return;
+      if (channels[i]->get_note(channels[i]->current).tone==STOP) return;
        if (channels[i]->next_invert_time < minDelay)
        {
          minDelay = channels[i]->next_invert_time;
          active = channels[i];
        }
      }
-     //minDelay = channels[2]->next_invert_time;
-     //active = channels[2];
-     if (active==NULL) debug(997);
-    // if (channels[0]->current->now.tone==9 && minDelay != 1353 && minDelay != 676) debug(minDelay);
      //BLOCK
-    // note* current = active->notes[active->current];
-     if (active->notes[active->current].tone!=REST)
+     if (active->get_note(active->current).tone!=REST)
          active->position = ! active->position;
- // if(active==channels[0])if(active->next_invert_time > channels[2]->next_invert_time) debug(1024);
   while (micros() < minDelay){}
      lastClock = micros();
 	  
@@ -222,28 +202,10 @@ void mixer::play()
 
        if (lastClock >= channels[i]->nextTime)
        {
-                //   if (++a==2) debug(0);
-         //debug(channels[i]->nextTime);
-      //  debug(0);
         channels[i]->next();
          channels[i]->setupNote(wall_clock_time);
-        // debug(channels[i]->nextTime);
-        //a++;
-       // channels[i]->setupNote(0); 
-
        } 
-      // debug(sizeof(channels[0]->nextTime));
-      // if (channels[0]->nextTime - lastClock > 50000) debug (channels[0]->duration_sum);
-      // if (lastClock < 1000000 && channels[0]->current->now.tone==4) debug(lastClock)   ;    
-
-
-
      }  
-  
-     
-     
-     
-a++;
   }
 }
 void mixer::add_channel(channel* x)

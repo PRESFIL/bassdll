@@ -32,11 +32,11 @@ channel pin10 (13,1);
 #define SNARE_LEN 7
 
 //pt 3
-#define kick  note(KICK, KICK_LEN), note(REST, EIGHTH-KICK_LEN),
-#define snare note(SNARE, SNARE_LEN), note(REST, EIGHTH-SNARE_LEN),
-#define rest  note(REST, EIGHTH),
+#define kick  NOTE(KICK, KICK_LEN), NOTE(REST, EIGHTH-KICK_LEN),
+#define snare NOTE(SNARE, SNARE_LEN), NOTE(REST, EIGHTH-SNARE_LEN),
+#define rest  NOTE(REST, EIGHTH),
 
-note drum_loop[] = {
+PATTERN(drum_loop) = {
   kick rest rest kick
   rest rest kick rest
   rest rest kick rest
@@ -58,20 +58,20 @@ note drum_loop[] = {
   snare rest snare rest
 };
 
-#define gsharp      note(-13, EIGHTH),
-#define gsharp4     note(-13, 4*EIGHTH),
-#define gsharp2low  note(-25, 2*EIGHTH),
-#define gsharp2high note(-13, 2*EIGHTH),
-#define transpose   note(TRANSPOSEUP, 0),
-#define transposed  note(TRANSPOSEDOWN, 0),  
-#define g2          note(-14, 2*EIGHTH),
-#define c           note(-9, EIGHTH),
-#define c4          note(-9, 4*EIGHTH),
-#define c2          note(-9, 2*EIGHTH),
-#define lowc        note(-21, EIGHTH),
-#define lowc4       note(-21, 4*EIGHTH),
+#define gsharp      NOTE(-13, EIGHTH),
+#define gsharp4     NOTE(-13, 4*EIGHTH),
+#define gsharp2low  NOTE(-25, 2*EIGHTH),
+#define gsharp2high NOTE(-13, 2*EIGHTH),
+#define transpose   NOTE(TRANSPOSEUP, 0),
+#define transposed  NOTE(TRANSPOSEDOWN, 0),  
+#define g2          NOTE(-14, 2*EIGHTH),
+#define c           NOTE(-9, EIGHTH),
+#define c4          NOTE(-9, 4*EIGHTH),
+#define c2          NOTE(-9, 2*EIGHTH),
+#define lowc        NOTE(-21, EIGHTH),
+#define lowc4       NOTE(-21, 4*EIGHTH),
 
-note part3_bassline[] = {
+PATTERN(part3_bassline) = {
   gsharp rest rest gsharp rest rest
   gsharp4 gsharp2low gsharp2high gsharp2low
   transpose transpose
@@ -86,30 +86,32 @@ note part3_bassline[] = {
 
 //sky notes
 
-#define sc       note(3,  EIGHTH),
-#define sgsharp  note(-1, EIGHTH),
-#define sf       note(-4, EIGHTH),
-#define sasharp  note(1,  EIGHTH),
-#define sg       note(-2, EIGHTH),
-#define se       note(-5, EIGHTH),
-#define sdu      note(5,  EIGHTH),
-#define seu      note(7,  EIGHTH),
-#define sfu      note(8,  EIGHTH),
-#define scd      note(-9, EIGHTH),
-#define sgu      note(10, EIGHTH),
-#define scu      note(15, EIGHTH),
-#define sbu      note(14, EIGHTH),
-#define sd       note(-7, EIGHTH),
-#define stop     note(STOP, 0),
-#define sgsharpu note(11, EIGHTH),
-#define sasharpu note(13, EIGHTH),
-#define sduu     note(17, EIGHTH),
-#define seuu     note(19, EIGHTH),
-#define sguu     note(22, EIGHTH),
-#define nulln    note(REST, EIGHTH * 16),
-#define scuu     note(27, EIGHTH * 16),
+#define sc       NOTE(3,  EIGHTH),
+#define sgsharp  NOTE(-1, EIGHTH),
+#define sf       NOTE(-4, EIGHTH),
+#define sasharp  NOTE(1,  EIGHTH),
+#define sg       NOTE(-2, EIGHTH),
+#define se       NOTE(-5, EIGHTH),
+#define sdu      NOTE(5,  EIGHTH),
+#define seu      NOTE(7,  EIGHTH),
+#define sfu      NOTE(8,  EIGHTH),
+#define scd      NOTE(-9, EIGHTH),
+#define sgu      NOTE(10, EIGHTH),
+#define scu      NOTE(15, EIGHTH),
+#define sbu      NOTE(14, EIGHTH),
+#define sd       NOTE(-7, EIGHTH),
+#define stop     NOTE(STOP, 0),
+#define sgsharpu NOTE(11, EIGHTH),
+#define sasharpu NOTE(13, EIGHTH),
+#define sduu     NOTE(17, EIGHTH),
+#define seuu     NOTE(19, EIGHTH),
+#define sguu     NOTE(22, EIGHTH),
+#define nulln    NOTE(REST, EIGHTH * 16),
+#define scuu     NOTE(27, EIGHTH * 16),
 
-note part3_sky[] = {
+PATTERN(part3_sky) = {
+  NOTE(1,2), NOTE(3,4), NOTE(5,6),
+  NOTE(-1,2), NOTE(-3,4), NOTE(-5,6),
   sc sgsharp sf sgsharp
   sc sgsharp sf sgsharp
   sc sgsharp sf sgsharp
@@ -190,60 +192,55 @@ note part3_sky[] = {
   stop
 };
 
-note part3_null[] = {
+PATTERN(part3_null) = {
   nulln
 };
-note part3_end[] = {
+
+PATTERN(part3_end) = {
   scuu stop
 };
 
 void pt3(channel &drums, channel &bassline, channel& sky)
 {
-  drums.notes = drum_loop;
-  drums.insert_at = NELEMENTS(drum_loop);
-  bassline.notes = part3_bassline;
-  bassline.insert_at = NELEMENTS(part3_bassline);
-  sky.notes = part3_sky;
-  sky.insert_at = NELEMENTS(part3_sky);  
+  SET_PATTERN(drums, drum_loop);
+  SET_PATTERN(bassline, part3_bassline);
+  SET_PATTERN(sky, part3_sky);
   m.play();
 
-  drums.notes = part3_null;
-  drums.insert_at = NELEMENTS(part3_null);
-  bassline.notes = part3_null;
-  bassline.insert_at = NELEMENTS(part3_null);
-  sky.notes = part3_end;
-  sky.insert_at = NELEMENTS(part3_end);
+  SET_PATTERN(drums, part3_null);
+  SET_PATTERN(bassline, part3_null);
+  SET_PATTERN(sky, part3_end);
   m.play();
 }
 
-#define sc note(27, EIGHTH),
-#define sg note(22, EIGHTH),
-#define se note(19, EIGHTH),
-#define sgsharp note(23, EIGHTH),
-#define sf note(20, EIGHTH),
-#define sd note(29, EIGHTH),
-#define sasharp note(25, EIGHTH),
-#define mclong note(3, EIGHTH * 10),
-#define melong note(7, EIGHTH * 10),
-#define mg note(-2, EIGHTH * 2),
-#define hg note(10, EIGHTH*2),
-#define mc note(3, EIGHTH * 2),
-#define me note(7, EIGHTH * 2),
-#define mf note(8, EIGHTH * 4),
-#define md4 note(5, EIGHTH * 4),
-#define me4 note(7, EIGHTH * 4),
-#define mc4 note(3, EIGHTH * 4),
-#define mchold note(3, EIGHTH * 24),
-#define mchold2 note(3, EIGHTH*10),
-#define mghold note(10, EIGHTH * 24),
-#define mghold2 note(10, EIGHTH*10),
-#define ma4 note(12, EIGHTH * 4),
-#define mg4 note(10, EIGHTH * 4),
-#define mgsharphold note(11, EIGHTH * 18), 
-#define masharphold note(13, EIGHTH * 16),
-#define mfhold note(8, EIGHTH * 16), 
+#define sc          NOTE(27, EIGHTH),
+#define sg          NOTE(22, EIGHTH),
+#define se          NOTE(19, EIGHTH),
+#define sgsharp     NOTE(23, EIGHTH),
+#define sf          NOTE(20, EIGHTH),
+#define sd          NOTE(29, EIGHTH),
+#define sasharp     NOTE(25, EIGHTH),
+#define mclong      NOTE( 3, EIGHTH * 10),
+#define melong      NOTE( 7, EIGHTH * 10),
+#define mg          NOTE(-2, EIGHTH * 2),
+#define hg          NOTE(10, EIGHTH * 2),
+#define mc          NOTE( 3, EIGHTH * 2),
+#define me          NOTE( 7, EIGHTH * 2),
+#define mf          NOTE( 8, EIGHTH * 4),
+#define md4         NOTE( 5, EIGHTH * 4),
+#define me4         NOTE( 7, EIGHTH * 4),
+#define mc4         NOTE( 3, EIGHTH * 4),
+#define mchold      NOTE( 3, EIGHTH * 24),
+#define mchold2     NOTE( 3, EIGHTH * 10),
+#define mghold      NOTE(10, EIGHTH * 24),
+#define mghold2     NOTE(10, EIGHTH * 10),
+#define ma4         NOTE(12, EIGHTH * 4),
+#define mg4         NOTE(10, EIGHTH * 4),
+#define mgsharphold NOTE(11, EIGHTH * 18), 
+#define masharphold NOTE(13, EIGHTH * 16),
+#define mfhold      NOTE( 8, EIGHTH * 16), 
 
-note part1_skyline[] = {
+PATTERN(part1_skyline) = {
   sc sg se sg
   sc sg se sg
   sc sg se sg
@@ -286,8 +283,7 @@ note part1_skyline[] = {
   sc
 };
 
-
-note part1_melody[] = {
+PATTERN(part1_melody) = {
   mclong
   mg
   mc
@@ -314,7 +310,7 @@ note part1_melody[] = {
 };
 
 
-note part1_harmony[] = {
+PATTERN(part1_harmony) = {
   transposed transposed transposed transposed transposed transposed
   transposed transposed transposed transposed transposed transposed
 
@@ -345,22 +341,19 @@ note part1_harmony[] = {
 
 void pt1(channel& melody, channel& harmony, channel& skyline)
 {
-  melody.notes = part1_melody;
-  melody.insert_at = NELEMENTS(part1_melody);
-  harmony.notes = part1_harmony;
-  harmony.insert_at = NELEMENTS(part1_harmony);
-  skyline.notes = part1_skyline;
-  skyline.insert_at = NELEMENTS(part1_skyline);
+  SET_PATTERN(melody, part1_melody);
+  SET_PATTERN(harmony, part1_harmony);
+  SET_PATTERN(skyline, part1_skyline);  
   m.play();
 }
 
-#define bc note(-21, EIGHTH),
-#define bc2 note(-21, EIGHTH * 2),
-#define bchigh note(-9, EIGHTH * 2),
-#define bgsharp note(-13, EIGHTH * 2),
-#define basharp note(-11, EIGHTH * 2),
+#define bc      NOTE(-21, EIGHTH),
+#define bc2     NOTE(-21, EIGHTH * 2),
+#define bchigh  NOTE(-9, EIGHTH * 2),
+#define bgsharp NOTE(-13, EIGHTH * 2),
+#define basharp NOTE(-11, EIGHTH * 2),
 
-note part2_bassline[] = {
+PATTERN(part2_bassline) = {
   bc2 rest
   bc2 rest 
   bc2 rest
@@ -390,38 +383,38 @@ note part2_bassline[] = {
   bchigh bgsharp  
 };
 
-#define mch note(-9, EIGHTH*10),
-#define mg note(-14, EIGHTH*2),
-#define mg4 note(-14, EIGHTH*4),
-#define mg1 note(-14, EIGHTH*1),
-#define mgold note(-2, EIGHTH * 12),
-#define mc note(-9, EIGHTH * 2),
-#define mcsharp1 note(-8, EIGHTH),
-#define mc1 note(-9, EIGHTH * 1),
-#define mcl note(-21, EIGHTH * 2),
-#define mc4 note(-9, EIGHTH * 4),
-#define me note(-5, EIGHTH * 2),
-#define me1 note(-5, EIGHTH * 1),
-#define mel8 note(-17, EIGHTH * 8),
-#define mf4 note(-4, EIGHTH * 4),
-#define mfl1 note(-16, EIGHTH),
-#define mf note(-4, EIGHTH * 2),
-#define mf1 note(-4, EIGHTH),
-#define md1 note(-7, EIGHTH),
-#define mdl note(-19, EIGHTH * 2),
-#define md4 note(-7, EIGHTH * 4),
-#define me4 note(-5, EIGHTH * 4),
-#define mchh note(-9, EIGHTH * 14),
-#define mcsecondhh note(-9, EIGHTH * 8),
-#define soloON note(SUPERSOLO, 1),
-#define soloOFF note(SUPERSOLO, 0),
-#define mgsharp note(-13, 2 * EIGHTH),
-#define mgsharp10 note(-13, 10 * EIGHTH),
-#define frest note(REST, EIGHTH / 2),
-#define moreSOLO note(SUPERSOLO, 1),
-#define stop note(STOP, 0),
+#define mch        NOTE(-9, EIGHTH*10),
+#define mg         NOTE(-14, EIGHTH*2),
+#define mg4        NOTE(-14, EIGHTH*4),
+#define mg1        NOTE(-14, EIGHTH*1),
+#define mgold      NOTE(-2, EIGHTH * 12),
+#define mc         NOTE(-9, EIGHTH * 2),
+#define mcsharp1   NOTE(-8, EIGHTH),
+#define mc1        NOTE(-9, EIGHTH * 1),
+#define mcl        NOTE(-21, EIGHTH * 2),
+#define mc4        NOTE(-9, EIGHTH * 4),
+#define me         NOTE(-5, EIGHTH * 2),
+#define me1        NOTE(-5, EIGHTH * 1),
+#define mel8       NOTE(-17, EIGHTH * 8),
+#define mf4        NOTE(-4, EIGHTH * 4),
+#define mfl1       NOTE(-16, EIGHTH),
+#define mf         NOTE(-4, EIGHTH * 2),
+#define mf1        NOTE(-4, EIGHTH),
+#define md1        NOTE(-7, EIGHTH),
+#define mdl        NOTE(-19, EIGHTH * 2),
+#define md4        NOTE(-7, EIGHTH * 4),
+#define me4        NOTE(-5, EIGHTH * 4),
+#define mchh       NOTE(-9, EIGHTH * 14),
+#define mcsecondhh NOTE(-9, EIGHTH * 8),
+#define soloON     NOTE(SUPERSOLO, 1),
+#define soloOFF    NOTE(SUPERSOLO, 0),
+#define mgsharp    NOTE(-13, 2 * EIGHTH),
+#define mgsharp10  NOTE(-13, 10 * EIGHTH),
+#define frest      NOTE(REST, EIGHTH / 2),
+#define moreSOLO   NOTE(SUPERSOLO, 1),
+#define stop       NOTE(STOP, 0),
 
-note part2_melody[] = {
+PATTERN(part2_melody) = {
   mch mg mc me mf4 me md4
   me soloON me soloOFF mchh
   rest rest rest rest
@@ -451,16 +444,14 @@ note part2_melody[] = {
 
 void pt2(channel& melody, channel& bassline, channel& drums)
 {
-  drums.notes = drum_loop;
-  drums.insert_at = NELEMENTS(drum_loop);
-  bassline.notes = part2_bassline;
-  bassline.insert_at = NELEMENTS(part2_bassline);
-  melody.notes = part2_melody;
-  melody.insert_at = NELEMENTS(part2_melody);
+  SET_PATTERN(drums, drum_loop);
+  SET_PATTERN(bassline, part2_bassline);
+  SET_PATTERN(melody, part2_melody);
   m.play();
 }
 
 void setup(){
+  Serial.begin(115200);
   m.add_channel(&pin10);
   m.add_channel(&pin11);
   m.add_channel(&pin12); //LOUD PIN
@@ -468,6 +459,6 @@ void setup(){
 
 void loop() {
   pt1(pin10,pin11,pin12);
-  pt2(pin12,pin11,pin10);
-  pt3(pin12,pin11,pin10);
+  pt2(pin10,pin11,pin12);
+  pt3(pin10,pin11,pin12);
 }

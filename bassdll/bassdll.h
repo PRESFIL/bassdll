@@ -32,12 +32,16 @@
 #include <math.h>
 
 #define NELEMENTS(x)  (sizeof(x) / sizeof(x[0]))
+#define PATTERN(name) prog_uint16_t name [] PROGMEM
+#define SET_PATTERN(channel, pattern) channel.set_pattern(pattern, NELEMENTS(pattern))
+#define NOTE(tone, duration) (((unsigned int)(tone+128)<<8)|duration)
 
 #define MAGIC 1.0594631
 inline int fixTone(signed char tone)
 {
   return 440*pow(MAGIC,tone);
 }
+
 ///NOTE
 #define TRANSPOSEUP  -124
 #define TRANSPOSEDOWN -123
@@ -59,6 +63,7 @@ inline int fixTone(signed char tone)
   this->duration = duration;
  }
 };
+
 ///CHANNEL
 class channel
 {
@@ -69,14 +74,12 @@ class channel
   signed char transpose; //channel-wide transpose (implemented in setupNote)
 
   public:
-      int insert_at;
       void init();
 void setupNote(unsigned long started_playing_time);
     void next();
     void fixHigh();
     void fixLow();
     inline void notehacks();
-    void realloc_notes();
     channel(int pin, int how_many_notes);
     ~channel();
     int halflife; //time from rising edge at which we invert the pin
@@ -90,12 +93,17 @@ void setupNote(unsigned long started_playing_time);
     } notehack;
     unsigned char supersolo; //supersolo value
     unsigned char ssinterval; //supersolo interval
-    
-    note *notes;
+    void set_pattern(prog_uint16_t* pattern, int size);
+    note get_note(int pos) {
+	unsigned int n = pgm_read_word_near(pattern + pos);
+	return note(((int)(n>>8))-128, n & 255);
+    }
+    int pattern_len;
     int current;
-    
-
+private:    
+    prog_uint16_t *pattern;
 };
+
 //////MIXER
 #define MIXER_CHANNELS 4 //if you need more than that
 class mixer
