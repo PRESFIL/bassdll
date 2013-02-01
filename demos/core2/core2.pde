@@ -206,11 +206,12 @@ void pt3(channel &drums, channel &bassline, channel& sky)
   SET_PATTERN(bassline, part3_bassline);
   SET_PATTERN(sky, part3_sky);
   m.play();
-
+/*
   SET_PATTERN(drums, part3_null);
   SET_PATTERN(bassline, part3_null);
   SET_PATTERN(sky, part3_end);
   m.play();
+*/
 }
 
 #define sc          NOTE(27, EIGHTH),
@@ -450,15 +451,50 @@ void pt2(channel& melody, channel& bassline, channel& drums)
   m.play();
 }
 
+String inputString = "";         // a string to hold incoming data
+boolean stringComplete = false;  // whether the string is complete
+
 void setup(){
   Serial.begin(115200);
+  inputString.reserve(200);
+
   m.add_channel(&pin10);
   m.add_channel(&pin11);
   m.add_channel(&pin12); //LOUD PIN
+  pt1(pin10, pin11, pin12);
+  //pt2(pin10, pin11, pin12);
+  //pt3(pin10, pin11, pin12);
+  m.init();
 }
 
+
 void loop() {
-  pt1(pin10,pin11,pin12);
-  pt2(pin10,pin11,pin12);
-  pt3(pin10,pin11,pin12);
+  m.loop();
 }
+
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read(); 
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character is a newline, set a flag
+    // so the main loop can do something about it:
+    if (inChar == '\n') {
+      switch(inputString[0]) {
+      case '1':
+        pt1(pin10, pin11, pin12);
+        break;
+      case '2':
+        pt2(pin10, pin11, pin12);
+        break;
+      case '3':
+        pt3(pin10, pin11, pin12);
+        break;
+      }
+      m.init();
+      inputString = "";
+    } 
+  }
+}
+

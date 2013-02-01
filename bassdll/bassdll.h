@@ -94,7 +94,7 @@ void setupNote(unsigned long started_playing_time);
     unsigned char supersolo; //supersolo value
     unsigned char ssinterval; //supersolo interval
     void set_pattern(prog_uint16_t* pattern, int size);
-    note get_note(int pos) {
+    inline note get_note(int pos) {
 	unsigned int n = pgm_read_word_near(pattern + pos);
 	return note(((int)(n>>8))-128, n & 255);
     }
@@ -109,12 +109,16 @@ private:
 class mixer
 {
 
-   int max_channel;
+    unsigned long lastClock;
+    unsigned long wall_clock_time;
+    int max_channel;
     public:
        channel *channels[MIXER_CHANNELS];
     mixer();
     void add_channel(channel*x);
-    void play();
+    void play() {}
+    void init();
+    void loop();
     void dump();
 };
 #endif

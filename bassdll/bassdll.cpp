@@ -160,19 +160,21 @@ mixer::mixer()
 {
   max_channel=0;
 }
-void mixer::play()
+
+void mixer::init()
 {
-  //dump();
-  unsigned long lastClock = micros();
-  unsigned long wall_clock_time = micros();
-  int a = 0;
+  lastClock = micros();
+  wall_clock_time = micros();
   for(int i = 0; i < max_channel; i++)
   {
     channels[i]->init();
     channels[i]->setupNote(wall_clock_time);
   }
-  while(true)
-  {  
+  //dump();
+}
+
+void mixer::loop()
+{
      //loop through each channel
      unsigned long minDelay  = ULONG_MAX;
      channel* active = NULL;
@@ -180,7 +182,7 @@ void mixer::play()
      for(int i = 0; i < max_channel; i++)
      {
        
-      if (channels[i]->get_note(channels[i]->current).tone==STOP) return;
+      if (channels[i]->get_note(channels[i]->current).tone==STOP) {init(); return;}
        if (channels[i]->next_invert_time < minDelay)
        {
          minDelay = channels[i]->next_invert_time;
@@ -206,7 +208,6 @@ void mixer::play()
          channels[i]->setupNote(wall_clock_time);
        } 
      }  
-  }
 }
 void mixer::add_channel(channel* x)
 {
