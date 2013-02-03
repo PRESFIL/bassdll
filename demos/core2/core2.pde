@@ -484,12 +484,18 @@ void serialEvent() {
       switch(inputString[0]) {
       case '1':
         pt1(pin10, pin11, pin12);
+        Serial.println("Switching to track 1");
         break;
       case '2':
         pt2(pin10, pin11, pin12);
+        Serial.println("Switching to track 2");
         break;
       case '3':
         pt3(pin10, pin11, pin12);
+        Serial.println("Switching to track 3");
+        break;
+      default:
+        Serial.println("Restarting current track");
         break;
       }
       m.init();
