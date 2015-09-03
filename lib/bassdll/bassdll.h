@@ -34,7 +34,7 @@
 #define NELEMENTS(x)  (sizeof(x) / sizeof(x[0]))
 #define PATTERN(name) const uint16_t name [] PROGMEM
 #define SET_PATTERN(channel, pattern) channel.set_pattern(pattern, NELEMENTS(pattern))
-#define NOTE(tone, duration) (((unsigned int)(tone+128)<<8)|duration)
+#define NOTE(tone, duration) (((unsigned int)(tone+128)<<8)|(duration))
 
 #define MAGIC 1.0594631
 inline int fixTone(signed char tone) {

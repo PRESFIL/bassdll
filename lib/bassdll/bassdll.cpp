@@ -150,7 +150,6 @@ void mixer::play() {
 	//dump();
 	unsigned long lastClock = micros();
 	unsigned long wall_clock_time = micros();
-	int a = 0;
 	for (int i = 0; i < max_channel; i++) {
 		channels[i]->init();
 		channels[i]->setupNote(wall_clock_time);

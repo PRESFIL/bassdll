@@ -23,9 +23,9 @@
 #include <debug.h>
 
 mixer m;
-channel pin12 (10,1);
+channel pin12 (12,1);
 channel pin11 (11,1);
-channel pin10 (13,1);
+channel pin10 (10,1);
 
 #define EIGHTH 10
 #define KICK_LEN 9
@@ -213,13 +213,13 @@ void pt3(channel &drums, channel &bassline, channel& sky)
   m.play();
 }
 
-#define sc          NOTE(27, EIGHTH),
-#define sg          NOTE(22, EIGHTH),
-#define se          NOTE(19, EIGHTH),
-#define sgsharp     NOTE(23, EIGHTH),
-#define sf          NOTE(20, EIGHTH),
-#define sd          NOTE(29, EIGHTH),
-#define sasharp     NOTE(25, EIGHTH),
+#define p1_sc          NOTE(27, EIGHTH),
+#define p1_sg          NOTE(22, EIGHTH),
+#define p1_se          NOTE(19, EIGHTH),
+#define p1_sgsharp     NOTE(23, EIGHTH),
+#define p1_sf          NOTE(20, EIGHTH),
+#define p1_sd          NOTE(29, EIGHTH),
+#define p1_sasharp     NOTE(25, EIGHTH),
 #define mclong      NOTE( 3, EIGHTH * 10),
 #define melong      NOTE( 7, EIGHTH * 10),
 #define mg          NOTE(-2, EIGHTH * 2),
@@ -241,46 +241,46 @@ void pt3(channel &drums, channel &bassline, channel& sky)
 #define mfhold      NOTE( 8, EIGHTH * 16), 
 
 PATTERN(part1_skyline) = {
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
 
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
 
-  sc sgsharp sf sgsharp
-  sc sgsharp sf sgsharp
-  sc sgsharp sf sgsharp
-  sc sgsharp sf sgsharp
+  p1_sc p1_sgsharp sf p1_sgsharp
+  p1_sc p1_sgsharp sf p1_sgsharp
+  p1_sc p1_sgsharp sf p1_sgsharp
+  p1_sc p1_sgsharp sf p1_sgsharp
 
-  sc sasharp sf sasharp 
-  sc sasharp sf sasharp 
-  sc sasharp sf sasharp 
-  sc sasharp sf sasharp 
+  p1_sc p1_sasharp sf p1_sasharp 
+  p1_sc p1_sasharp sf p1_sasharp 
+  p1_sc p1_sasharp sf p1_sasharp 
+  p1_sc p1_sasharp sf p1_sasharp 
 
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
 
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
-  sc sg se sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
+  p1_sc p1_sg p1_se p1_sg
 
-  sc sgsharp sf sgsharp
-  sc sgsharp sf sgsharp
-  sc sgsharp sf sgsharp
-  sc sgsharp sf sgsharp
+  p1_sc p1_sgsharp p1_sf p1_sgsharp
+  p1_sc p1_sgsharp p1_sf p1_sgsharp
+  p1_sc p1_sgsharp p1_sf p1_sgsharp
+  p1_sc p1_sgsharp p1_sf p1_sgsharp
 
-  sd sasharp sf sasharp
-  sd sasharp sf sasharp
-  sd sasharp sf sasharp
-  sd sasharp sf sasharp
-  sc
+  p1_sd p1_sasharp p1_sf p1_sasharp
+  p1_sd p1_sasharp p1_sf p1_sasharp
+  p1_sd p1_sasharp p1_sf p1_sasharp
+  p1_sd p1_sasharp p1_sf p1_sasharp
+  p1_sc
 };
 
 PATTERN(part1_melody) = {
@@ -383,62 +383,62 @@ PATTERN(part2_bassline) = {
   bchigh bgsharp  
 };
 
-#define mch        NOTE(-9, EIGHTH*10),
-#define mg         NOTE(-14, EIGHTH*2),
-#define mg4        NOTE(-14, EIGHTH*4),
-#define mg1        NOTE(-14, EIGHTH*1),
-#define mgold      NOTE(-2, EIGHTH * 12),
-#define mc         NOTE(-9, EIGHTH * 2),
-#define mcsharp1   NOTE(-8, EIGHTH),
-#define mc1        NOTE(-9, EIGHTH * 1),
-#define mcl        NOTE(-21, EIGHTH * 2),
-#define mc4        NOTE(-9, EIGHTH * 4),
-#define me         NOTE(-5, EIGHTH * 2),
-#define me1        NOTE(-5, EIGHTH * 1),
-#define mel8       NOTE(-17, EIGHTH * 8),
-#define mf4        NOTE(-4, EIGHTH * 4),
-#define mfl1       NOTE(-16, EIGHTH),
-#define mf         NOTE(-4, EIGHTH * 2),
-#define mf1        NOTE(-4, EIGHTH),
-#define md1        NOTE(-7, EIGHTH),
-#define mdl        NOTE(-19, EIGHTH * 2),
-#define md4        NOTE(-7, EIGHTH * 4),
-#define me4        NOTE(-5, EIGHTH * 4),
-#define mchh       NOTE(-9, EIGHTH * 14),
-#define mcsecondhh NOTE(-9, EIGHTH * 8),
+#define p2_mch        NOTE(-9, EIGHTH*10),
+#define p2_mg         NOTE(-14, EIGHTH*2),
+#define p2_mg4        NOTE(-14, EIGHTH*4),
+#define p2_mg1        NOTE(-14, EIGHTH*1),
+#define p2_mgold      NOTE(-2, EIGHTH * 12),
+#define p2_mc         NOTE(-9, EIGHTH * 2),
+#define p2_mcsharp1   NOTE(-8, EIGHTH),
+#define p2_mc1        NOTE(-9, EIGHTH * 1),
+#define p2_mcl        NOTE(-21, EIGHTH * 2),
+#define p2_mc4        NOTE(-9, EIGHTH * 4),
+#define p2_me         NOTE(-5, EIGHTH * 2),
+#define p2_me1        NOTE(-5, EIGHTH * 1),
+#define p2_mel8       NOTE(-17, EIGHTH * 8),
+#define p2_mf4        NOTE(-4, EIGHTH * 4),
+#define p2_mfl1       NOTE(-16, EIGHTH),
+#define p2_mf         NOTE(-4, EIGHTH * 2),
+#define p2_mf1        NOTE(-4, EIGHTH),
+#define p2_md1        NOTE(-7, EIGHTH),
+#define p2_mdl        NOTE(-19, EIGHTH * 2),
+#define p2_md4        NOTE(-7, EIGHTH * 4),
+#define p2_me4        NOTE(-5, EIGHTH * 4),
+#define p2_mchh       NOTE(-9, EIGHTH * 14),
+#define p2_mcsecondhh NOTE(-9, EIGHTH * 8),
+#define p2_mgsharp    NOTE(-13, 2 * EIGHTH),
+#define p2_mgsharp10  NOTE(-13, 10 * EIGHTH),
+#define p2_moreSOLO   NOTE(SUPERSOLO, 1),
 #define soloON     NOTE(SUPERSOLO, 1),
 #define soloOFF    NOTE(SUPERSOLO, 0),
-#define mgsharp    NOTE(-13, 2 * EIGHTH),
-#define mgsharp10  NOTE(-13, 10 * EIGHTH),
 #define frest      NOTE(REST, EIGHTH / 2),
-#define moreSOLO   NOTE(SUPERSOLO, 1),
 #define stop       NOTE(STOP, 0),
 
 PATTERN(part2_melody) = {
-  mch mg mc me mf4 me md4
-  me soloON me soloOFF mchh
+  p2_mch p2_mg p2_mc p2_me p2_mf4 p2_me p2_md4
+  p2_me soloON p2_me soloOFF p2_mchh
   rest rest rest rest
   //m12
-  mc4 mgsharp mc4 md4 mc  
-  mch mg mc me
+  p2_mc4 p2_mgsharp p2_mc4 p2_md4 p2_mc  
+  p2_mch p2_mg p2_mc p2_me
   //m13
-  mf4 me md4 mc4 mc
+  p2_mf4 p2_me p2_md4 p2_mc4 p2_mc
   //m14
-  mgold mf me
+  p2_mgold p2_mf p2_me
   //m15
-  mf1 me1 mc1 mg1 mg4 mg4
+  p2_mf1 p2_me1 p2_mc1 p2_mg1 p2_mg4 p2_mg4
   ///
-  mf1 me1 moreSOLO mc1 mg1 soloOFF
+  p2_mf1 p2_me1 p2_moreSOLO p2_mc1 p2_mg1 soloOFF
   //again
-  mch mg mc me mf4 me md4
-  me
-  moreSOLO me1 me1 md1 mcsharp1 soloOFF
-  mcsecondhh
-  mc mg mc mg mgsharp10 mfl1 mfl1 mgsharp mc
-  mg4 mg mc4
-  mg mc me mf4 me md4 mc4 rest mc1
-  mgold mf me
-  mf1 me1 mc1 mfl1 mel8 mdl mcl
+  p2_mch p2_mg p2_mc p2_me p2_mf4 p2_me p2_md4
+  p2_me
+  p2_moreSOLO p2_me1 p2_me1 p2_md1 p2_mcsharp1 soloOFF
+  p2_mcsecondhh
+  p2_mc p2_mg p2_mc p2_mg p2_mgsharp10 p2_mfl1 p2_mfl1 p2_mgsharp p2_mc
+  p2_mg4 p2_mg p2_mc4
+  p2_mg p2_mc p2_me p2_mf4 p2_me p2_md4 p2_mc4 rest p2_mc1
+  p2_mgold p2_mf p2_me
+  p2_mf1 p2_me1 p2_mc1 p2_mfl1 p2_mel8 p2_mdl p2_mcl
   stop
 };
 
