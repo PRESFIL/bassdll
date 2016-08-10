@@ -384,7 +384,7 @@ PATTERN(part2_bassline) = {
 };
 
 #define mch        NOTE(-9, EIGHTH*10),
-#define mg         NOTE(-14, EIGHTH*2),
+#define mg         NOTE(-14, EIGHTH*2),
 #define mg4        NOTE(-14, EIGHTH*4),
 #define mg1        NOTE(-14, EIGHTH*1),
 #define mgold      NOTE(-2, EIGHTH * 12),

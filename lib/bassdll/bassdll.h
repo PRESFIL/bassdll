@@ -37,7 +37,8 @@
 #define NOTE(tone, duration) (((unsigned int)(tone+128)<<8)|(duration))
 
 #define MAGIC 1.0594631
-inline int fixTone(signed char tone) {
+inline int fixTone(signed char tone)
+{
 	return 440 * pow(MAGIC, tone);
 }
 
@@ -53,65 +54,73 @@ inline int fixTone(signed char tone) {
 #define STOP -122
 
 #define SUPERSOLO -121
-struct note {
+
+struct note 
+{
 	signed char tone;
 	unsigned char duration;
-	note() {
-	}
-	note(signed char tone, unsigned char duration) {
+	//note() {}
+	note(signed char tone, unsigned char duration) 
+	{
 		this->tone = tone;
 		this->duration = duration;
 	}
 };
 
 ///CHANNEL
-class channel {
-
-	//note array
-
+class channel 
+{
+private:
+	const uint16_t *pattern; //note array ptr
 	unsigned long duration_sum;
 	signed char transpose; //channel-wide transpose (implemented in setupNote)
 
 public:
+	channel(int pin); //deleted - int how_many_notes
+	~channel();
+
 	void init();
+	void set_pattern(const uint16_t* pattern, int size);
 	void setupNote(unsigned long started_playing_time);
 	void next();
-	void fixHigh();
-	void fixLow();
 	inline void notehacks();
-	channel(int pin, int how_many_notes);
-	~channel();
+	note get_note(int pos) 
+	{
+		unsigned int n = pgm_read_word_near(pattern + pos);
+		return note(((int) (n >> 8)) - 128, n & 255);
+	}
+	
 	int halflife; //time from rising edge at which we invert the pin
 	unsigned long next_invert_time;
 	unsigned long nextTime; //wall-clock-time at which we go to the next note
+	
+	int pattern_len;
+	int current;
+
 	int pin; //pin the channel writes on
 	char position; //is the pin up or down?
+	
 	union q //used for various purposes by the notehack
 	{
 		int i;
 	} notehack;
+	
 	unsigned char supersolo; //supersolo value
 	unsigned char ssinterval; //supersolo interval
-	void set_pattern(const uint16_t* pattern, int size);
-	note get_note(int pos) {
-		unsigned int n = pgm_read_word_near(pattern + pos);
-		return note(((int) (n >> 8)) - 128, n & 255);
-	}
-	int pattern_len;
-	int current;
-private:
-	const uint16_t *pattern;
 };
 
 //////MIXER
 #define MIXER_CHANNELS 4 //if you need more than that
-class mixer {
+class mixer 
+{
 	int max_channel;
+
 public:
-	channel *channels[MIXER_CHANNELS];
 	mixer();
 	void add_channel(channel*x);
 	void play();
 	void dump();
+
+	channel *channels[MIXER_CHANNELS];
 };
 #endif
