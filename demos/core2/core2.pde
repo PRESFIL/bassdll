@@ -23,9 +23,9 @@
 #include <debug.h>
 
 mixer m;
-channel pin12 (10,1);
-channel pin11 (11,1);
-channel pin10 (13,1);
+channel pin12 (10);
+channel pin11 (11);
+channel pin10 (13);
 
 #define EIGHTH 10
 #define KICK_LEN 9
@@ -85,7 +85,6 @@ PATTERN(part3_bassline) = {
 };
 
 //sky notes
-
 #define sc       NOTE(3,  EIGHTH),
 #define sgsharp  NOTE(-1, EIGHTH),
 #define sf       NOTE(-4, EIGHTH),
@@ -199,19 +198,6 @@ PATTERN(part3_null) = {
 PATTERN(part3_end) = {
   scuu stop
 };
-
-void pt3(channel &drums, channel &bassline, channel& sky)
-{
-  SET_PATTERN(drums, drum_loop);
-  SET_PATTERN(bassline, part3_bassline);
-  SET_PATTERN(sky, part3_sky);
-  m.play();
-
-  SET_PATTERN(drums, part3_null);
-  SET_PATTERN(bassline, part3_null);
-  SET_PATTERN(sky, part3_end);
-  m.play();
-}
 
 #define sc          NOTE(27, EIGHTH),
 #define sg          NOTE(22, EIGHTH),
@@ -337,15 +323,7 @@ PATTERN(part1_harmony) = {
   me4
   mgsharphold
   masharphold
-};
-
-void pt1(channel& melody, channel& harmony, channel& skyline)
-{
-  SET_PATTERN(melody, part1_melody);
-  SET_PATTERN(harmony, part1_harmony);
-  SET_PATTERN(skyline, part1_skyline);  
-  m.play();
-}
+}; 
 
 #define bc      NOTE(-21, EIGHTH),
 #define bc2     NOTE(-21, EIGHTH * 2),
@@ -442,6 +420,14 @@ PATTERN(part2_melody) = {
   stop
 };
 
+void pt1(channel& melody, channel& harmony, channel& skyline)
+{
+  SET_PATTERN(melody, part1_melody);
+  SET_PATTERN(harmony, part1_harmony);
+  SET_PATTERN(skyline, part1_skyline);  
+  m.play();
+}
+
 void pt2(channel& melody, channel& bassline, channel& drums)
 {
   SET_PATTERN(drums, drum_loop);
@@ -450,14 +436,29 @@ void pt2(channel& melody, channel& bassline, channel& drums)
   m.play();
 }
 
-void setup(){
+void pt3(channel &drums, channel &bassline, channel& sky)
+{
+  SET_PATTERN(drums, drum_loop);
+  SET_PATTERN(bassline, part3_bassline);
+  SET_PATTERN(sky, part3_sky);
+  m.play();
+
+  SET_PATTERN(drums, part3_null);
+  SET_PATTERN(bassline, part3_null);
+  SET_PATTERN(sky, part3_end);
+  m.play();
+}
+
+void setup()
+{
   Serial.begin(115200);
   m.add_channel(&pin10);
   m.add_channel(&pin11);
   m.add_channel(&pin12); //LOUD PIN
 }
 
-void loop() {
+void loop() 
+{
   pt1(pin10,pin11,pin12);
   pt2(pin10,pin11,pin12);
   pt3(pin10,pin11,pin12);
